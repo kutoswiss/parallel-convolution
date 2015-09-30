@@ -2,7 +2,7 @@ CC=gcc -std=gnu99 -Wall -Wextra
 
 all: conv
 
-conv: filter/filter.o main.o
+conv: filter.o main.o
 	$(CC) -o conv filter.o main.o
 
 main.o: main.c filter.o
