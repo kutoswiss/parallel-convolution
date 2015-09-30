@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "filter/filter.h"
+#include "ppm/ppm.h"
 
 
 int main()
