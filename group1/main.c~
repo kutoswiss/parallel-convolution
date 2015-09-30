@@ -3,6 +3,5 @@
 
 int main()
 {
-	// HELOOOO
 	return EXIT_SUCCESS;
 }
