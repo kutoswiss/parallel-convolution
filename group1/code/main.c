@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include "filter/filter.h"
 
 
 int main()
 {
-	// HELOOOO
+	filter_t f;
 	return EXIT_SUCCESS;
 }
