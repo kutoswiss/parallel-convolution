@@ -10,9 +10,17 @@
  * @param kernel_t* The convolution kernel (struct type)
  * @param img_t* The image ppm format
  */
-void apply_kernel(img_t* img, kernel_t* k) {
-	// TODO: Ecrire la fonction permettant d'appliquer le filtre
+void convolve_pixel(img_t* img_src, img_t* img_dst, kernel_t* k, int x, int y) {
+	int half_size = k->size / 2;
+
+	for(int ky = 0; ky < half_size; ky++) {
+		for(int kx = 0; kx < half_size; kx++) {
+			pixel_t init_px = get_pixel(img_src, x + kx, y + ky);
+
+		}
+	}
 }
+
 
 int main(int argc, char **argv) {
 	if(argc < ARGC_MIN) {
@@ -26,6 +34,7 @@ int main(int argc, char **argv) {
 
 	// Load the image from filename
 	img_t* img = load_ppm(img_input_filename);
+	img_t* img_dst = load_ppm(img_input_filename);
 	if (img == NULL) {
 		fprintf(stderr, "Failed loading %s!\n", img_input_filename);
 		return EXIT_FAILURE;
@@ -36,10 +45,9 @@ int main(int argc, char **argv) {
 	set_edge_kernel(k);
 
 	// Apply the kernel
-	apply_kernel(img, k);
 
 	// Write the new image
-	if (!write_ppm(img_output_filename, img)) {
+	if (!write_ppm(img_output_filename, img_dst)) {
 		fprintf(stderr, "Failed writing %s!\n", img_output_filename);
 		free_img(img);
 		return EXIT_FAILURE;

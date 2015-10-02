@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include "kernel.h"
 
+
+
 /**
  * @brief Function who set the identity filter on the parameter
  * @param kernel_t* A pointer to the convolution filter (struct type)
@@ -54,6 +56,14 @@ void print_kernel(kernel_t* k) {
 void free_kernel(kernel_t* k) {
 	free(k->matrix);
 	free(k);
+}
+
+/**
+ * @brief 
+ * @param 
+ */
+void get_kernel_value(kernel_t k, int x, int y) {
+	// TODO: Ecrire la fonction permettant d'obtenir la valeur du kernel a une position x, y
 }
 
 

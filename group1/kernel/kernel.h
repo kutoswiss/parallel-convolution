@@ -9,7 +9,8 @@ typedef struct kernel_st{
 	int* matrix; /**< Pointer to an integer to store the matrix on a one dimension array*/
 }kernel_t;
 
-void set_identity_kernel(kernel_t* k);
-void set_edge_kernel(kernel_t* k);
-void print_kernel(kernel_t* k);
-void free_kernel(kernel_t* k);
+extern void set_identity_kernel(kernel_t* k);
+extern void set_edge_kernel(kernel_t* k);
+extern void print_kernel(kernel_t* k);
+extern void free_kernel(kernel_t* k);
+extern void get_kernel_value(kernel_t k, int x, int y);
