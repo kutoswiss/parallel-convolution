@@ -35,6 +35,24 @@ void set_edge_kernel(kernel_t* k) {
 	k->matrix[4] = 8;
 }
 
+/**
+ * @brief Function who set the edge filter on the parameter
+ * @param kernel_t* A pointer to the convolution filter (struct type)
+ */
+void set_sharpen_kernel(kernel_t* k) {
+	k->size = 3;
+	k->matrix = malloc(sizeof(int) * k->size * k->size );
+
+	for(int i = 0; i < k->size * k->size; i++)
+		k->matrix[i] = 0;
+		
+	k->matrix[1] = -1;
+	k->matrix[3] = -1;
+	k->matrix[4] = 5;
+	k->matrix[5] = -1;
+	k->matrix[7] = -1;
+}
+
 
 /**
  * @brief Function who print the filter on output terminal
@@ -60,10 +78,12 @@ void free_kernel(kernel_t* k) {
 
 /**
  * @brief 
- * @param 
+ * @param kernel_t Kernel structure type
+ * @param integer x
+ * @param integer y
  */
-void get_kernel_value(kernel_t k, int x, int y) {
-	// TODO: Ecrire la fonction permettant d'obtenir la valeur du kernel a une position x, y
+int get_kernel_value(kernel_t* k, int x, int y) {
+	return k->matrix[(y+1) * k->size + (x+1)];
 }
 
 

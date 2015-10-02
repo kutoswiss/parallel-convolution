@@ -11,6 +11,7 @@ typedef struct kernel_st{
 
 extern void set_identity_kernel(kernel_t* k);
 extern void set_edge_kernel(kernel_t* k);
+extern void set_sharpen_kernel(kernel_t* k);
 extern void print_kernel(kernel_t* k);
 extern void free_kernel(kernel_t* k);
-extern void get_kernel_value(kernel_t k, int x, int y);
+extern int get_kernel_value(kernel_t* k, int x, int y);

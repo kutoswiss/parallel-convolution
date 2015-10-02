@@ -79,14 +79,20 @@ error:
 	return NULL;
 }
 
+/**
+ * @brief
+ */
 pixel_t get_pixel(img_t* img, int x, int y) {
 	pixel_t value = {0, 0, 0};
-	if(x > 0 && x <= img->width && y > 0 && y <= img->height) {
-		value = img->data[y * img->height + x];
-	}
+	if(x>=0 && x < img->width && y >= 0 && y < img->height)
+		value = img->data[y * img->width + x];
+
 	return value;
 }
 
+/**
+ * @brief
+ */
 void set_pixel(img_t* img, pixel_t value, int x, int y) {
 	img->data[y * img->width + x] = value;
 }
