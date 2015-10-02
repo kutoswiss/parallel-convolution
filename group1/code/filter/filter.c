@@ -2,22 +2,60 @@
 #define __FILTER_H__
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "filter.h"
 
-void set_identity_filter(filter_t* f)
-{
+/**
+ * @brief Function who set the identity filter on the parameter
+ * @param filter_t* A pointer to the convolution filter (struct type)
+ */
+void set_identity_filter(filter_t* f) {
 	f->size = 3;
+	f->matrix = malloc(sizeof(int) * f->size * f->size );
 
-	f->matrix = (int**) malloc(f->size * sizeof(int*));
-	for (int i = 0; i < f->size; i++)
-   		f->matrix[i] = (int*) malloc(f->size*sizeof(double));
-
-
-	for(int y = 0; y < f->size; y++)
-		for(int x = 0; x < f->size; x++)
-			f->matrix[y][x] = 0;
+	for(int i = 0; i < f->size * f->size; i++)
+		f->matrix[i] = 0;
 		
-	f->matrix[1][1] = 1;
+	f->matrix[4] = 1;
 }
+
+/**
+ * @brief Function who set the edge filter on the parameter
+ * @param filter_t* A pointer to the convolution filter (struct type)
+ */
+void set_edge_filter(filter_t* f) {
+	f->size = 3;
+	f->matrix = malloc(sizeof(int) * f->size * f->size );
+
+	for(int i = 0; i < f->size * f->size; i++)
+		f->matrix[i] = -1;
+		
+	f->matrix[4] = 8;
+}
+
+
+/**
+ * @brief Function who print the filter on output terminal
+ * @param filter_t* The convolution filter (struct type)
+ */
+void print_filter(filter_t* f) {
+	for(int h = 0; h < f->size * f->size; h+=(f->size)) {
+		for(int w = 0; w < f->size; w++)
+			printf("%d ", f->matrix[h + w]);
+
+		printf("\n");
+	}
+}
+
+/**
+ * @brief Function used to free the filter 
+ * @param filter_t* The convolution filter (struct type)
+ */
+void free_filter(filter_t* f) {
+	free(f->matrix);
+	free(f);
+}
+
+
 
 #endif
