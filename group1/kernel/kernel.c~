@@ -96,11 +96,16 @@ int get_kernel_value(kernel_t* k, int x, int y) {
  * @param char* to select de kernel choose
  */
 bool set_select_kernel(kernel_t* k, char *kernel_select) {
+printf (kernel_select);
+
 
 	if (!strcmp(kernel_select,"identity"))
 		set_identity_kernel(k);
 	else if (!strcmp(kernel_select,"edge"))
+	{
 		set_edge_kernel(k);
+		printf("hellooo");
+	}
 	else if (!strcmp(kernel_select,"sharpen"))
 		set_sharpen_kernel(k);
 	else if (!strcmp(kernel_select,"emboss"))
