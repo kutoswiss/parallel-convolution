@@ -75,6 +75,7 @@ void error_input_arg() {
 
 
 int main(int argc, char **argv) {
+
 	if(argc < ARGC_MIN) {
 		error_input_arg();	
 		return EXIT_FAILURE;
@@ -95,13 +96,12 @@ int main(int argc, char **argv) {
 
     // Load the kernel
 	kernel_t* k = malloc(sizeof(kernel_t));
-
-	if (!set_select_kernel(k, kernel_select)) {
-		error_input_arg();	
-		return EXIT_FAILURE;		
+	if(!load_kernel(k, kernel_select)) {
+		error_input_arg();
+		return EXIT_FAILURE;
 	}
+	load_kernel(k, kernel_select);
 
-	print_kernel(k);
 
 	// Apply the kernel
 	convolve(img, img_dst, k);

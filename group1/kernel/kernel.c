@@ -8,7 +8,44 @@
 #include "kernel.h"
 
 
+/**
+ * @brief Function to load a kernel from .msk file
+ * @param kernel_t* A pointer to the convolution filter (struct type)
+ */
+bool load_kernel(kernel_t* k, char* name) {
+	FILE *f;
+	int i = -1;
+	char *str = malloc(sizeof(char) * 99);
+	char *path = malloc(sizeof(char) * 99);
 
+	strcpy(path, KERNEL_PATH);
+	strcat(path, name);
+	strcat(path, ".msk");
+
+	f = fopen(path, "r");
+	
+	while(fscanf(f, "%s", str) != EOF) {
+		char *token;
+		char *line = malloc(sizeof(char) * 99);
+		strcpy(line, str);
+
+		if(i < 0) {
+			k->size = atoi(line);
+			k->matrix = malloc(sizeof(int) * k->size * k->size);
+		}
+
+		while((token = strsep(&line, ";")) != NULL) {
+			if(i >= 0)
+				k->matrix[i] = atoi(token);
+			i++;
+		}
+	}	
+	fclose(f);
+	free(str);
+	free(path);
+
+	return true;
+}
 
 /**
  * @brief Function who set the identity filter on the parameter
@@ -88,50 +125,6 @@ void free_kernel(kernel_t* k) {
 int get_kernel_value(kernel_t* k, int x, int y) {
 	return k->matrix[(y+1) * k->size + (x+1)];
 }
-
-
-/**
- * @brief 
- * @param kernel_t Kernel structure type
- * @param char* to select de kernel choose
- */
-bool set_select_kernel(kernel_t* k, char *kernel_select) {
-
-	if (!strcmp(kernel_select,"identity"))
-		set_identity_kernel(k);
-	else if (!strcmp(kernel_select,"edge"))
-		set_edge_kernel(k);
-	else if (!strcmp(kernel_select,"sharpen"))
-		set_sharpen_kernel(k);
-	else if (!strcmp(kernel_select,"emboss"))
-	{
-		printf("a venir ...");
-		return 0;
-	}
-	else if (!strcmp(kernel_select,"blur"))
-	{	
-		printf("a venir ...");
-		return 0;
-	}
-	else if (!strcmp(kernel_select,"gauss"))
-	{
-		printf("a venir ...");
-		return 0;
-	}
-	else if (!strcmp(kernel_select,"unsharp"))
-	{
-		printf("a venir ...");
-		return 0;
-	}
-	else
-		return 0;
-
-	return 1;
-
-}
-
-
-
 
 
 #endif
