@@ -1,17 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <time.h>
 #include "error/error.h"
 #include "convolution/convolution.h"
 
 #define ARGC_MIN 3
 
+void get_time(struct timespec* t);
+void print_measure(struct timespec start, struct timespec finish);
+
 int main(int argc, char **argv) {
+	struct timespec start, finish;
+	get_time(&start);
 
-		//pthread_t thread;
-
+	//pthread_t thread;
 	convolve_t *p = malloc(sizeof(convolve_t));
-
 	//convolve_param_t *p[] = malloc(sizeof(convolve_param_t) * 10); // 10 = nbr de thread
 
 	if(argc < ARGC_MIN) {
@@ -65,5 +69,18 @@ int main(int argc, char **argv) {
 	free_img(p->img_src);
 	free_img(p->img_dst);
 
+	get_time(&finish);
+	print_measure(start, finish);
+
 	return EXIT_SUCCESS;
+}
+
+void get_time(struct timespec* t) {
+	clock_gettime(CLOCK_MONOTONIC, t);
+}
+
+void print_measure(struct timespec start, struct timespec finish) {
+	double elapsed_ms = 1000 * (finish.tv_sec - start.tv_sec);
+	elapsed_ms += (finish.tv_nsec - start.tv_nsec) / 1000000.0;
+	printf("%f [ms]\n", elapsed_ms);
 }
