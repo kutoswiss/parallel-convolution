@@ -1,9 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 #include "kernel/kernel.h"
 #include "ppm/ppm.h"
 
 #define ARGC_MIN 3
+
+
+/**
+ * Structure kernel_st 
+ * The kernel structure is composed
+ * typedef kernel_t
+ */
+typedef struct convolve_param_st{
+	int nbr_thread; 
+	int num_thread;
+	img_t* img_src;
+	img_t* img_dst;
+	kernel_t* k;
+
+}convolve_param_t;
+
 
 
 /**
@@ -66,6 +83,25 @@ void convolve(img_t* img_src, img_t* img_dst, kernel_t* k) {
 			convolve_pixel(img_src, img_dst, k, x, y);
 }
 
+
+
+/**
+ * @brief Function used to apply a 2D convolution to a ppm image
+ */
+void convolve_thread(convolve_param_t* p) {
+
+	int bloc = p->img_src->height / p->nbr_thread;
+	int debut = p->num_thread * bloc;
+
+	for(int y = debut; y < debut+bloc; y++)
+		for(int x = 0; x < p->img_src->width; x++)
+			convolve_pixel(p->img_src, p->img_dst, p->k, x, y);
+}
+
+
+
+
+
 void error_input_arg() {
 	printf("Bad input arguments : ./conv input output K N\n");
 	printf("input & output = PPM file\n");
@@ -85,46 +121,71 @@ void error_ppm_not_found() {
 
 int main(int argc, char **argv) {
 
+		//pthread_t thread;
+
+	convolve_param_t *p = malloc(sizeof(convolve_param_t));
+
+	//convolve_param_t *p[] = malloc(sizeof(convolve_param_t) * 10); // 10 = nbr de thread
+
 	if(argc < ARGC_MIN) {
 		error_input_arg();	
 		return EXIT_FAILURE;
 	}
 
-	// Get the input arguments
+	// Get the input and output filename
 	char* img_input_filename = argv[1];
 	char* img_output_filename = argv[2];
 	char* kernel_select = argv[3];
 
 	// Load the image from filename
-	img_t* img = load_ppm(img_input_filename);
-	img_t* img_dst = alloc_img(img->width, img->height);
-	if (img == NULL) {
+	p->img_src = load_ppm(img_input_filename);
+	
+
+
+	p->img_dst = alloc_img(p->img_src->width, p->img_src->height);
+	if (p->img_src == NULL) {
 		fprintf(stderr, "Failed loading %s!\n", img_input_filename);
 		return EXIT_FAILURE;
     }
 
+
     // Load the kernel
-	kernel_t* k = malloc(sizeof(kernel_t));
-	if(!load_kernel(k, kernel_select)) {
+	p->k = malloc(sizeof(kernel_t));
+	if(!load_kernel(p->k, kernel_select)) {
 		error_kernel_not_found();
 		return EXIT_FAILURE;
 	}
-	//load_kernel(k, kernel_select);
+
+	print_kernel(p->k);
 
 	// Apply the kernel
-	convolve(img, img_dst, k);
+	
+	p->nbr_thread = 50;
+	p->num_thread = 0;
+
+	//printf("je suis dans le main \n");
+
+	convolve_thread(p);
+
+	p->num_thread = 33;
+
+	convolve_thread(p);
+
+	//convolve(img, img_dst, k);
+
+	
 
 	// Write the new image
-	if (!write_ppm(img_output_filename, img_dst)) {
+	if (!write_ppm(img_output_filename, p->img_dst)) {
 		fprintf(stderr, "Failed writing %s!\n", img_output_filename);
-		free_img(img);
+		free_img(p->img_src);
 		return EXIT_FAILURE;
 	}
 
-	// Free the memory :)
-	free_kernel(k);
-	free_img(img);
-	free_img(img_dst);
+	//Free the memory :)
+	free_kernel(p->k);
+	free_img(p->img_src);
+	free_img(p->img_dst);
 
 	return EXIT_SUCCESS;
 }
