@@ -14,7 +14,7 @@
  */
 bool load_kernel(kernel_t* k, char* name) {
 	FILE *f;
-	int i = -1;
+	int i = -1; // Start at -1 to be able to read the first line (size of the kernel)
 	char *str = malloc(sizeof(char) * 99);
 	char *path = malloc(sizeof(char) * 99);
 
@@ -23,74 +23,33 @@ bool load_kernel(kernel_t* k, char* name) {
 	strcat(path, ".msk");
 
 	f = fopen(path, "r");
-	
-	while(fscanf(f, "%s", str) != EOF) {
-		char *token;
-		char *line = malloc(sizeof(char) * 99);
-		strcpy(line, str);
 
-		if(i < 0) {
-			k->size = atoi(line);
-			k->matrix = malloc(sizeof(int) * k->size * k->size);
+	if(f != NULL) {
+		while(fscanf(f, "%s", str) != EOF) {
+			char *token;
+			char *line = malloc(sizeof(char) * 99);
+			strcpy(line, str);
+
+			if(i < 0) {
+				k->size = atoi(line);
+				k->matrix = malloc(sizeof(int) * k->size * k->size);
+			}
+
+			while((token = strsep(&line, ";")) != NULL) {
+				if(i >= 0)
+					k->matrix[i] = atoi(token);
+				i++;
+			}
 		}
 
-		while((token = strsep(&line, ";")) != NULL) {
-			if(i >= 0)
-				k->matrix[i] = atoi(token);
-			i++;
-		}
-	}	
-	fclose(f);
-	free(str);
-	free(path);
+		fclose(f);
+		free(str);
+		free(path);
 
-	return true;
-}
-
-/**
- * @brief Function who set the identity filter on the parameter
- * @param kernel_t* A pointer to the convolution filter (struct type)
- */
-void set_identity_kernel(kernel_t* k) {
-	k->size = 3;
-	k->matrix = malloc(sizeof(int) * k->size * k->size );
-
-	for(int i = 0; i < k->size * k->size; i++)
-		k->matrix[i] = 0;
-		
-	k->matrix[4] = 1;
-}
-
-/**
- * @brief Function who set the edge filter on the parameter
- * @param kernel_t* A pointer to the convolution filter (struct type)
- */
-void set_edge_kernel(kernel_t* k) {
-	k->size = 3;
-	k->matrix = malloc(sizeof(int) * k->size * k->size );
-
-	for(int i = 0; i < k->size * k->size; i++)
-		k->matrix[i] = -1;
-		
-	k->matrix[4] = 8;
-}
-
-/**
- * @brief Function who set the edge filter on the parameter
- * @param kernel_t* A pointer to the convolution filter (struct type)
- */
-void set_sharpen_kernel(kernel_t* k) {
-	k->size = 3;
-	k->matrix = malloc(sizeof(int) * k->size * k->size );
-
-	for(int i = 0; i < k->size * k->size; i++)
-		k->matrix[i] = 0;
-		
-	k->matrix[1] = -1;
-	k->matrix[3] = -1;
-	k->matrix[4] = 5;
-	k->matrix[5] = -1;
-	k->matrix[7] = -1;
+		return true;	
+	}
+	else 
+		return false;
 }
 
 

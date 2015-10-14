@@ -57,7 +57,7 @@ void convolve_pixel(img_t* img_src, img_t* img_dst, kernel_t* k, int x, int y) {
 	set_pixel(img_dst, float_to_pixel_t(r, g, b), x, y);
 }
 
-/**
+/** 
  * @brief Function used to apply a 2D convolution to a ppm image
  */
 void convolve(img_t* img_src, img_t* img_dst, kernel_t* k) {
@@ -67,10 +67,19 @@ void convolve(img_t* img_src, img_t* img_dst, kernel_t* k) {
 }
 
 void error_input_arg() {
-	printf("Mauvais parametre d'entrée : ./conv input output -K -N\n");
-	printf("input & output = file PPM\n");
+	printf("Bad input arguments : ./conv input output K N\n");
+	printf("input & output = PPM file\n");
+	printf("K = Kernel to use :\n\tidentity(3x3)\n\tsharpen(3x3)\n\tedge(3x3)\n\temboss(3x3)\n\tblur(3x3)\n\tgauss(5x5)\n\tunsharp(5x5)\n");
+	printf("N = number of thread (0 = without thread)\n");
+}
+
+void error_kernel_not_found() {
+	printf("Error: Kernel not found\n");
 	printf("-K = Kernel to use :\n\tidentity(3x3)\n\tsharpen(3x3)\n\tedge(3x3)\n\temboss(3x3)\n\tblur(3x3)\n\tgauss(5x5)\n\tunsharp(5x5)\n");
-	printf("-N = number of thread (0= version séquentiel)\n");
+}
+
+void error_ppm_not_found() {
+	printf("Error: ppm file not found\n");
 }
 
 
@@ -81,7 +90,7 @@ int main(int argc, char **argv) {
 		return EXIT_FAILURE;
 	}
 
-	// Get the input and output filename
+	// Get the input arguments
 	char* img_input_filename = argv[1];
 	char* img_output_filename = argv[2];
 	char* kernel_select = argv[3];
@@ -97,11 +106,10 @@ int main(int argc, char **argv) {
     // Load the kernel
 	kernel_t* k = malloc(sizeof(kernel_t));
 	if(!load_kernel(k, kernel_select)) {
-		error_input_arg();
+		error_kernel_not_found();
 		return EXIT_FAILURE;
 	}
-	load_kernel(k, kernel_select);
-
+	//load_kernel(k, kernel_select);
 
 	// Apply the kernel
 	convolve(img, img_dst, k);
