@@ -2,11 +2,17 @@ CC=gcc -std=gnu99 -Wall
 
 all: conv
 
-conv: kernel.o main.o ppm.o
-	$(CC) -o conv kernel.o ppm.o main.o
+conv: error.o convolution.o kernel.o main.o ppm.o
+	$(CC) -o conv error.o convolution.o kernel.o ppm.o main.o
 
-main.o: main.c kernel.o ppm.o
+main.o: main.c error.o convolution.o
 	$(CC) -c main.c
+
+error.o:
+	$(CC) -c error/error.c
+
+convolution.o: kernel.o ppm.o
+	$(CC) -c convolution/convolution.c
 
 kernel.o:
 	$(CC) -c kernel/kernel.c
