@@ -39,14 +39,14 @@ void convolve(img_t* img_src, img_t* img_dst, kernel_t* k) {
 /**
  * @brief Function used to apply a 2D convolution to a ppm image
  */
-void convolve_thread(convolve_t* p) {
+void convolve_thread(convolve_param_t* p) {
 
-	int bloc = p->img_src->height / p->nbr_thread;
-	int debut = p->num_thread * bloc;
+	int bloc = p->c->img_src->height / p->c->n_thread;
+	int debut = p->current_thread * bloc;
 
 	for(int y = debut; y < debut+bloc; y++)
-		for(int x = 0; x < p->img_src->width; x++)
-			convolve_pixel(p->img_src, p->img_dst, p->k, x, y);
+		for(int x = 0; x < p->c->img_src->width; x++)
+			convolve_pixel(p->c->img_src, p->c->img_dst, p->c->k, x, y);
 }
 
 /**
