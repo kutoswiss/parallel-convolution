@@ -5,13 +5,12 @@
 #include "error/error.h"
 #include "convolution/convolution.h"
 
-#define ARGC_MIN 4
+#define ARGC_MIN 5
 
 void get_time(struct timespec* t);
 void print_measure(struct timespec start, struct timespec finish);
 
 int main(int argc, char **argv) {
-
 
 	if(argc < ARGC_MIN) {
 		error_input_arg();	
