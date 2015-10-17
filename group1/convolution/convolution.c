@@ -5,8 +5,11 @@
 
 /**
  * @brief Function used to apply a filter to a ppm image
- * @param kernel_t* The convolution kernel (struct type)
- * @param img_t* The image ppm format
+ * @param img_t* The ppm image source
+ * @param img_t* The ppm image destination
+ * @param kernel_t* The kernel
+ * @param int Position x
+ * @param int Position y
  */
 void convolve_pixel(img_t* img_src, img_t* img_dst, kernel_t* k, int x, int y) {
 	int half_size = k->size / 2; // Can be optimized
@@ -29,6 +32,9 @@ void convolve_pixel(img_t* img_src, img_t* img_dst, kernel_t* k, int x, int y) {
 
 /** 
  * @brief Function used to apply a 2D convolution to a ppm image
+ * @param img_t* The ppm image source
+ * @param img_t* The ppm image destination
+ * @param kernel_t* The kernel
  */
 void convolve(img_t* img_src, img_t* img_dst, kernel_t* k) {
 	for(int y = 0; y < img_src->height; y++)
@@ -38,6 +44,7 @@ void convolve(img_t* img_src, img_t* img_dst, kernel_t* k) {
 
 /**
  * @brief Function used to apply a 2D convolution to a ppm image
+ * @param Parameters used for the thread (void*)
  */
 void* convolve_thread(void* c) {
 	convolve_param_t* p = (convolve_param_t*) c;
@@ -54,6 +61,7 @@ void* convolve_thread(void* c) {
 
 /**
  * @brief Function to convert float to uint8_t
+ * @param Float value
  */
 uint8_t float_to_uint8_t(float v) {
 	uint8_t r = 0;
