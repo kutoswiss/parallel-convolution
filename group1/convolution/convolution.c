@@ -18,7 +18,7 @@
  * @param int Position y
  */
 void convolve_pixel(img_t* img_src, img_t* img_dst, kernel_t* k, int x, int y) {
-	int half_size = k->size / 2; // Can be optimized
+	int half_size = k->size / 2; 
 	float r = 0.0;
 	float g = 0.0;
 	float b = 0.0;

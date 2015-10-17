@@ -38,7 +38,7 @@ void error_ppm_not_found() {
  * @brief Function to print the error
  */
 void error_amount_threads() {
-	printf("N must be higher than 0\n");
+	printf("N must be higher than 0 and lower than the image height size.\n");
 }
 
 

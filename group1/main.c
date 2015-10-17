@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
 		return EXIT_FAILURE;
 	}
 
-	pthread_t* thread = malloc(sizeof(pthread_t) * N);
+	pthread_t* threads = malloc(sizeof(pthread_t) * N);
 	struct timespec start, finish;
 	
 	convolve_param_t** p = malloc(sizeof(convolve_param_t*) * N);
@@ -47,17 +47,21 @@ int main(int argc, char **argv) {
 		return EXIT_FAILURE;
     }
 
+    if(N > c->img_src->height) {
+		error_amount_threads();
+		return EXIT_FAILURE;
+	}
+
     c->img_dst = alloc_img(c->img_src->width, c->img_src->height);
     c->n_thread = N;
-
-    // Load the kernel
 	c->k = malloc(sizeof(kernel_t));
+
+
 	if(!load_kernel(c->k, kernel_select)) {
 		error_kernel_not_found();
 		return EXIT_FAILURE;
 	}
-	print_kernel(c->k);
-
+	
 	get_time(&start);
 
 	// Create threads
@@ -65,7 +69,7 @@ int main(int argc, char **argv) {
 		p[i] = malloc(sizeof(convolve_param_t));
 		p[i]->c = c;
 		p[i]->current_thread = i;
-		if(pthread_create(&thread[i], NULL, convolve_thread, p[i])) {
+		if(pthread_create(&threads[i], NULL, convolve_thread, p[i])) {
 			perror("error");
 			return EXIT_FAILURE;
 		}
@@ -73,7 +77,7 @@ int main(int argc, char **argv) {
 
 	// Join threads
 	for(int i = 0; i < N; i++) {
-		if(pthread_join(thread[i], NULL) != 0) {
+		if(pthread_join(threads[i], NULL) != 0) {
 			perror("error on join");
 			return EXIT_FAILURE;
 		}
@@ -90,11 +94,11 @@ int main(int argc, char **argv) {
 		return EXIT_FAILURE;
 	}
 
-	//Free the memory :)
+	// Free the memory :)
 	free_kernel(c->k);
 	free_img(c->img_src);
 	free_img(c->img_dst);
-	free(thread);
+	free(threads);
 	free(c);
 	for(int i = 0; i < N; i++) free(p[i]);
 	
