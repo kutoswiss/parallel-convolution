@@ -3,7 +3,7 @@ CC=gcc -std=gnu99 -Wall
 all: conv
 
 conv: error.o convolution.o kernel.o main.o ppm.o
-	$(CC) -o conv error.o convolution.o kernel.o ppm.o main.o -lpthread
+	$(CC) -o conv error.o convolution.o kernel.o ppm.o main.o -lpthread -O3
 
 main.o: main.c error.o convolution.o
 	$(CC) -c main.c

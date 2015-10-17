@@ -14,7 +14,6 @@ typedef struct convolve_st{
 	img_t* img_src;
 	img_t* img_dst;
 	kernel_t* k;
-
 }convolve_t;
 
 /**

@@ -23,6 +23,11 @@ int main(int argc, char **argv) {
 	char* kernel_select = argv[3];
 	int N = atoi(argv[4]);
 
+	if(N < 0) {
+		error_amount_threads();
+		return EXIT_FAILURE;
+	}
+
 	pthread_t* thread = malloc(sizeof(pthread_t) * N);
 	struct timespec start, finish;
 	

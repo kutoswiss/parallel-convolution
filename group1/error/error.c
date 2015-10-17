@@ -19,5 +19,9 @@ void error_ppm_not_found() {
 	printf("Error: ppm file not found\n");
 }
 
+void error_amount_threads() {
+	printf("N must be higher than 0\n");
+}
+
 
 #endif
