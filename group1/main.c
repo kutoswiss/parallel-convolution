@@ -84,7 +84,9 @@ int main(int argc, char **argv) {
 	free_img(c->img_src);
 	free_img(c->img_dst);
 	free(thread);
-
+	free(c);
+	for(int i = 0; i < N; i++) free(p[i]);
+	
 	return EXIT_SUCCESS;
 }
 
