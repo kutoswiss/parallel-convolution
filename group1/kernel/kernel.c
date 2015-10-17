@@ -37,7 +37,7 @@ bool load_kernel(kernel_t* k, char* name) {
 
 			while((token = strsep(&line, ";")) != NULL) {
 				if(i >= 0)
-					k->matrix[i] = atoi(token);
+					k->matrix[i] = atof(token);
 				i++;
 			}
 		}
@@ -60,7 +60,7 @@ bool load_kernel(kernel_t* k, char* name) {
 void print_kernel(kernel_t* k) {
 	for(int h = 0; h < k->size * k->size; h+=(k->size)) {
 		for(int w = 0; w < k->size; w++)
-			printf("%d ", k->matrix[h + w]);
+			printf("%f ", k->matrix[h + w]);
 
 		printf("\n");
 	}
@@ -81,7 +81,7 @@ void free_kernel(kernel_t* k) {
  * @param integer x
  * @param integer y
  */
-int get_kernel_value(kernel_t* k, int x, int y) {
+float get_kernel_value(kernel_t* k, int x, int y) {
 	return k->matrix[(y+1) * k->size + (x+1)];
 }
 

@@ -45,6 +45,7 @@ int main(int argc, char **argv) {
 		error_kernel_not_found();
 		return EXIT_FAILURE;
 	}
+	print_kernel(c->k);
 
 	get_time(&start);
 

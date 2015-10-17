@@ -17,7 +17,7 @@ void convolve_pixel(img_t* img_src, img_t* img_dst, kernel_t* k, int x, int y) {
 	for(int ky = -half_size; ky <= half_size; ky++) {
 		for(int kx = -half_size; kx <= half_size; kx++) {
 			pixel_t src_px = get_pixel(img_src, x + kx, y + ky);
-			int kernel_value = get_kernel_value(k, kx, ky);
+			float kernel_value = get_kernel_value(k, kx, ky);
 
 			r += (kernel_value * src_px.r);
 			g += (kernel_value * src_px.g);
