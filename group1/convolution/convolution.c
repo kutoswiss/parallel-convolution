@@ -57,10 +57,16 @@ void* convolve_thread(void* c) {
 
 	int bloc = p->c->img_src->height / p->c->n_thread;
 	int debut = p->current_thread * bloc;
+	//if (p->current_thread != p->c->n_thread-1){
+		for(int y = debut; y < debut+bloc; y++)
+			for(int x = 0; x < p->c->img_src->width; x++)
+				convolve_pixel(p->c->img_src, p->c->img_dst, p->c->k, x, y);
+	/*}	else{
+		for(int y = debut; y < p->c->img_src->height; y++)
+			for(int x = 0; x < p->c->img_src->width; x++)
+				convolve_pixel(p->c->img_src, p->c->img_dst, p->c->k, x, y);
+	} */
 
-	for(int y = debut; y < debut+bloc; y++)
-		for(int x = 0; x < p->c->img_src->width; x++)
-			convolve_pixel(p->c->img_src, p->c->img_dst, p->c->k, x, y);
 
 	return NULL;
 }
