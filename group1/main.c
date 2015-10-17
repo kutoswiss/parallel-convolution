@@ -11,12 +11,11 @@ void get_time(struct timespec* t);
 void print_measure(struct timespec start, struct timespec finish);
 
 int main(int argc, char **argv) {
+	const int N = 3; // Nbr de thread
 
+	pthread_t* thread = malloc(sizeof(pthread_t) * N);
 	struct timespec start, finish;
 	get_time(&start);
-
-	//pthread_t thread;
-	int N = 3; // Nbr de thread
 
 	convolve_param_t** p = malloc(sizeof(convolve_param_t*) * N);
 	convolve_t *c = malloc(sizeof(convolve_t));
@@ -51,14 +50,33 @@ int main(int argc, char **argv) {
 
 	c->n_thread = N;
 
-    for(int i = 0; i < N; i++){
+    /*for(int i = 0; i < N; i++){
 		p[i] = malloc(sizeof(convolve_param_t));
 		p[i]->c = c;
 		p[i]->current_thread = i;
 	}
 
 	convolve_thread(p[0]);
-	convolve_thread(p[1]);
+	convolve_thread(p[1]);*/
+
+	// Create threads
+	for(int i = 0; i < N; i++) {
+		p[i] = malloc(sizeof(convolve_param_t));
+		p[i]->c = c;
+		p[i]->current_thread = i;
+		if(pthread_create(&thread[i], NULL, convolve_thread, p[i])) {
+			perror("error");
+			return EXIT_FAILURE;
+		}
+	}
+
+	// Join threads
+	for(int i = 0; i < N; i++) {
+		if(pthread_join(thread[i], NULL) != 0) {
+			perror("error on join");
+			return EXIT_FAILURE;
+		}
+	}
 
 
 	// Write the new image
