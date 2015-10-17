@@ -1,3 +1,9 @@
+/* ------------------------------------------
+ * Project: 2D Convolution with Pthread
+ * Authors: Rejas C. & Poroli F.
+ * Version: 1.0, 2015-10-16
+ * ------------------------------------------*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -21,7 +27,7 @@ int main(int argc, char **argv) {
 	char* img_input_filename = argv[1];
 	char* img_output_filename = argv[2];
 	char* kernel_select = argv[3];
-	int N = atoi(argv[4]);
+	uint N = atoi(argv[4]);
 
 	if(N < 0) {
 		error_amount_threads();

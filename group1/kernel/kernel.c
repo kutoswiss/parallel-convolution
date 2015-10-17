@@ -1,3 +1,9 @@
+/* ------------------------------------------
+ * Project: 2D Convolution with Pthread
+ * Authors: Rejas C. & Poroli F.
+ * Version: 1.0, 2015-10-16
+ * ------------------------------------------*/
+
 #ifndef __KERNEL_H__
 #define __KERNEL_H__
 
@@ -11,6 +17,7 @@
 /**
  * @brief Function to load a kernel from .msk file
  * @param kernel_t* A pointer to the convolution filter (struct type)
+ * @param char* name of the kernel (concretly the filename without .msk extension)
  */
 bool load_kernel(kernel_t* k, char* name) {
 	FILE *f;

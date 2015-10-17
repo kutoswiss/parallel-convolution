@@ -1,4 +1,9 @@
-
+/* ------------------------------------------
+ * Project: 2D Convolution with Pthread
+ * Authors: Rejas C. & Poroli F.
+ * Version: 1.0, 2015-10-16
+ * ------------------------------------------*/
+ 
 #include <stdio.h>
 #include <stdlib.h>
 #include "../kernel/kernel.h"

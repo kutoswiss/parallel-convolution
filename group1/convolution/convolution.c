@@ -1,3 +1,9 @@
+/* ------------------------------------------
+ * Project: 2D Convolution with Pthread
+ * Authors: Rejas C. & Poroli F.
+ * Version: 1.0, 2015-10-16
+ * ------------------------------------------*/
+
 #ifndef __CONVOLUTION_H__
 #define __CONVOLUTION_H__
 

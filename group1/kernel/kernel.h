@@ -1,3 +1,9 @@
+/* ------------------------------------------
+ * Project: 2D Convolution with Pthread
+ * Authors: Rejas C. & Poroli F.
+ * Version: 1.0, 2015-10-16
+ * ------------------------------------------*/
+
 #include <stdbool.h>
 #define KERNEL_PATH "kernel/msk/"
 
@@ -8,7 +14,7 @@
  */
 typedef struct kernel_st{
 	int size; /**< integer type for the size of the matrix (always a square size) */
-	float* matrix; /**< Pointer to an integer to store the matrix on a one dimension array*/
+	float* matrix; /**< Pointer to a float to store the matrix on a one dimension dynmaic array*/
 }kernel_t;
 
 extern bool load_kernel();
