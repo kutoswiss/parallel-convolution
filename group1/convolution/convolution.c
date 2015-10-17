@@ -56,12 +56,12 @@ void* convolve_thread(void* c) {
 	convolve_param_t* p = (convolve_param_t*) c;
 
 	int bloc = p->c->img_src->height / p->c->n_thread;
-	int debut = p->current_thread * bloc;
-
-	int height_size = (p->current_thread != p->c->n_thread-1) ? (debut + bloc) : p->c->img_src->height;
-	for(int y = debut; y < height_size; y++)
-			for(int x = 0; x < p->c->img_src->width; x++)
-				convolve_pixel(p->c->img_src, p->c->img_dst, p->c->k, x, y);
+	int row_start = p->current_thread * bloc;
+	int height_size = (p->current_thread != p->c->n_thread-1) ? (row_start + bloc) : p->c->img_src->height;
+	
+	for(int y = row_start; y < height_size; y++)
+		for(int x = 0; x < p->c->img_src->width; x++)
+			convolve_pixel(p->c->img_src, p->c->img_dst, p->c->k, x, y);
 
 	return NULL;
 }
