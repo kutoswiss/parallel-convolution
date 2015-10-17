@@ -5,25 +5,25 @@
 #include "error/error.h"
 #include "convolution/convolution.h"
 
-#define ARGC_MIN 3
+#define ARGC_MIN 4
 
 void get_time(struct timespec* t);
 void print_measure(struct timespec start, struct timespec finish);
 
 int main(int argc, char **argv) {
-	const int N = 3; // Nbr de thread
-
-	pthread_t* thread = malloc(sizeof(pthread_t) * N);
-	struct timespec start, finish;
-	get_time(&start);
-
-	convolve_param_t** p = malloc(sizeof(convolve_param_t*) * N);
-	convolve_t *c = malloc(sizeof(convolve_t));
 
 	if(argc < ARGC_MIN) {
 		error_input_arg();	
 		return EXIT_FAILURE;
 	}
+
+	int N = atoi(argv[4]);
+	pthread_t* thread = malloc(sizeof(pthread_t) * N);
+	struct timespec start, finish;
+	
+
+	convolve_param_t** p = malloc(sizeof(convolve_param_t*) * N);
+	convolve_t *c = malloc(sizeof(convolve_t));
 
 	// Get the input and output filename
 	char* img_input_filename = argv[1];
@@ -32,12 +32,13 @@ int main(int argc, char **argv) {
 
 	// Load the image from filename
 	c->img_src = load_ppm(img_input_filename);
-	
-	c->img_dst = alloc_img(c->img_src->width, c->img_src->height);
 	if (c->img_src == NULL) {
 		fprintf(stderr, "Failed loading %s!\n", img_input_filename);
 		return EXIT_FAILURE;
     }
+
+    c->img_dst = alloc_img(c->img_src->width, c->img_src->height);
+    c->n_thread = N;
 
     // Load the kernel
 	c->k = malloc(sizeof(kernel_t));
@@ -46,18 +47,7 @@ int main(int argc, char **argv) {
 		return EXIT_FAILURE;
 	}
 
-	print_kernel(c->k);
-
-	c->n_thread = N;
-
-    /*for(int i = 0; i < N; i++){
-		p[i] = malloc(sizeof(convolve_param_t));
-		p[i]->c = c;
-		p[i]->current_thread = i;
-	}
-
-	convolve_thread(p[0]);
-	convolve_thread(p[1]);*/
+	get_time(&start);
 
 	// Create threads
 	for(int i = 0; i < N; i++) {
@@ -78,6 +68,9 @@ int main(int argc, char **argv) {
 		}
 	}
 
+	get_time(&finish);
+	print_measure(start, finish);
+
 
 	// Write the new image
 	if (!write_ppm(img_output_filename, c->img_dst)) {
@@ -90,9 +83,6 @@ int main(int argc, char **argv) {
 	free_kernel(c->k);
 	free_img(c->img_src);
 	free_img(c->img_dst);
-
-	get_time(&finish);
-	print_measure(start, finish);
 
 	return EXIT_SUCCESS;
 }
