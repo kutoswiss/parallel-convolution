@@ -19,7 +19,7 @@ typedef struct convolve_st{
 
 /**
  * Structure convolve_param_st 
- * The convolution parameter structure is composed
+ * The convolution parameter structure used for the thread
  * typedef convolve_param_t
  */
 typedef struct convolve_param_st{
@@ -27,7 +27,6 @@ typedef struct convolve_param_st{
 	int current_thread;
 
 }convolve_param_t;
-
 
 
 void convolve_pixel(img_t* img_src, img_t* img_dst, kernel_t* k, int x, int y);

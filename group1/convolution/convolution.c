@@ -41,12 +41,14 @@ void convolve(img_t* img_src, img_t* img_dst, kernel_t* k) {
  */
 void* convolve_thread(void* c) {
 	convolve_param_t* p = (convolve_param_t*) c;
+
 	int bloc = p->c->img_src->height / p->c->n_thread;
 	int debut = p->current_thread * bloc;
 
 	for(int y = debut; y < debut+bloc; y++)
 		for(int x = 0; x < p->c->img_src->width; x++)
 			convolve_pixel(p->c->img_src, p->c->img_dst, p->c->k, x, y);
+
 	return NULL;
 }
 
@@ -67,6 +69,9 @@ uint8_t float_to_uint8_t(float v) {
 
 /**
  * @brief Function to convert float to pixel_t struct type
+ * @param Red value (float)
+ * @param Green value (float)
+ * @param Blue value (float)
  */
 pixel_t float_to_pixel_t(float r, float g, float b) {
 	pixel_t p = {0, 0, 0};
