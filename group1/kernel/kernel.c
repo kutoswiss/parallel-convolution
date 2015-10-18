@@ -89,7 +89,8 @@ void free_kernel(kernel_t* k) {
  * @param integer y
  */
 float get_kernel_value(kernel_t* k, int x, int y) {
-	return k->matrix[(y+1) * k->size + (x+1)];
+	int half = k->size / 2;
+	return k->matrix[(y+half) * k->size + (x+half)];
 }
 
 
